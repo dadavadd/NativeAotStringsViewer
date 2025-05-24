@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using static Windows.Win32.PInvoke;
 using static Windows.Win32.System.Threading.PROCESS_ACCESS_RIGHTS;
 
-namespace Lreks;
+namespace NativeAotStringsViewer.Readers;
 
 public class AotRuntimeReader : IMemoryReader, IDisposable
 {
@@ -24,14 +24,14 @@ public class AotRuntimeReader : IMemoryReader, IDisposable
         _processHandle = OpenProcess_SafeHandle(PROCESS_ALL_ACCESS, false, (uint)process.Id);
     }
 
-    public unsafe T Read<T>(IntPtr address) where T : unmanaged
+    public unsafe T Read<T>(nint address) where T : unmanaged
     {
         T result;
         ReadProcessMemory(_processHandle, address.ToPointer(), &result, (nuint)sizeof(T), null);
         return result;
     }
 
-    public unsafe Span<byte> ReadBytes(IntPtr address, int size)
+    public unsafe Span<byte> ReadBytes(nint address, int size)
     {
         var buffer = new byte[size];
         fixed (byte* bufPtr = buffer)

@@ -14,11 +14,11 @@
 		<IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<IlcDehydrate>false</IlcDehydrate>
-		<OptimizationPreference>Size</OptimizationPreference>
+		<OptimizationPreference>Speed</OptimizationPreference>
 		<IlcDisableReflection>true</IlcDisableReflection>
 		<UseSizeOptimizedLinq>false</UseSizeOptimizedLinq>
+		<StackTraceSupport>true</StackTraceSupport>
 		<DebuggerSupport>false</DebuggerSupport>
-		<PlatformTarget>x64</PlatformTarget>
 	</PropertyGroup>
 
 	<PropertyGroup>

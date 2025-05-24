@@ -23,11 +23,11 @@ internal class StringReader(IMemoryReader reader)
             var currentAddr = baseAddress + i;
             var potentialVTable = reader.Read<IntPtr>(currentAddr);
 
-            if (potentialVTable == stringVTableAddress)
-            {
-                var str = ConvertAddressToString(currentAddr);
-                result.Add(new(currentAddr, str));
-            }
+            if (potentialVTable != stringVTableAddress)
+                continue;
+
+            var str = ConvertAddressToString(currentAddr);
+            result.Add(new(currentAddr, str));
         }
 
         return (result, stringVTableAddress);
@@ -37,8 +37,7 @@ internal class StringReader(IMemoryReader reader)
     {
         int length = reader.Read<int>(stringAddr + StringLengthOffset);
 
-        var byteLength = length * 2;
-        Span<byte> rawBytes = reader.ReadBytes(stringAddr + StringFirstCharOffset, byteLength);
+        var rawBytes = reader.ReadBytes(stringAddr + StringFirstCharOffset, length * 2);
         var str = Encoding.Unicode.GetString(rawBytes);
 
         return EscapeString(str);

@@ -1,18 +1,10 @@
-﻿using Lreks;
-using Lreks.Interfaces;
+﻿using Lreks.Interfaces;
 using Lreks.Structs;
 
-public class ReadyToRunHeaderFinder
+namespace Lreks;
+
+public class ReadyToRunHeaderFinder(IMemoryReader memory, ProcessSegmentStartInfo segment)
 {
-    private readonly IMemoryReader _memory;
-    private readonly ProcessSegmentStartInfo _segment;
-
-    public ReadyToRunHeaderFinder(IMemoryReader memory, ProcessSegmentStartInfo segment)
-    {
-        _memory = memory;
-        _segment = segment;
-    }
-
     public ReadyToRunHeaderInfo Find()
     {
         IntPtr headerAddress;
@@ -31,18 +23,18 @@ public class ReadyToRunHeaderFinder
             throw new InvalidOperationException("ReadyToRun header not found.");
         }
 
-        var header = _memory.Read<ReadyToRunHeader>(headerAddress);
+        var header = memory.Read<ReadyToRunHeader>(headerAddress);
         return new ReadyToRunHeaderInfo(version, headerAddress, header);
     }
 
     private IntPtr Find(ReadOnlySpan<byte> signature)
     {
-        var bytes = _memory.ReadBytes(_segment.Offset, _segment.Size);
+        var bytes = memory.ReadBytes(segment.Offset, segment.Size);
         for (int i = 0; i <= bytes.Length - signature.Length; i++)
         {
             if (bytes.Slice(i, signature.Length).SequenceEqual(signature))
             {
-                return _segment.Offset + i;
+                return segment.Offset + i;
             }
         }
         return IntPtr.Zero;

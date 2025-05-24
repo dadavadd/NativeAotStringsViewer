@@ -2,9 +2,9 @@
 
 namespace Lreks;
 
-public class ReadyToRunHeaderInfo(int version, IntPtr address, ReadyToRunHeader header)
+public class ReadyToRunHeaderInfo(int dotnetVersion, IntPtr address, ReadyToRunHeader header)
 {
-    public int Version { get; } = version;
+    public int DotnetVersion { get; } = dotnetVersion;
     public IntPtr Address { get; } = address;
     public ReadyToRunHeader Header { get; } = header;
 }
